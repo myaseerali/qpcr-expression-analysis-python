@@ -2,6 +2,17 @@ import matplotlib.pyplot as plt
 
 
 def plot_heatmap(summary_df):
+    """
+    Plot heatmap of mean fold change values.
+
+    Parameters:
+        summary_df (pandas.DataFrame):
+            DataFrame containing group-wise mean fold changes.
+
+    Saves:
+        results/heatmap.png
+    """
+
     genes = ["FC_IFNG", "FC_IL2RA", "FC_TNFA"]
     groups = summary_df.index.tolist()
 

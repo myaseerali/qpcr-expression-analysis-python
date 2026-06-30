@@ -1,15 +1,16 @@
-# def calculate_mean_ct(df):
-#     mean_ct = (
-#         df.groupby(["Sample", "Group", "Target"])["Ct"]
-#         .mean()
-#         .reset_index()
-#     )
-
-#     mean_ct.rename(columns={"Ct": "Mean_Ct"}, inplace=True)
-
-#     return mean_ct
-
 def calculate_mean_ct(df):
+    """
+    Calculate mean Ct values for each Sample, Group, and Target.
+
+    Parameters:
+        df (pandas.DataFrame):
+            Raw qPCR dataset containing Ct values.
+
+    Returns:
+        pandas.DataFrame:
+            DataFrame containing mean Ct values.
+    """
+
     mean_ct = (
         df.groupby(["Sample", "Group", "Target"])["Ct"]
         .mean()
@@ -22,6 +23,21 @@ def calculate_mean_ct(df):
 
 
 def calculate_delta_ct(mean_ct_df):
+    """
+    Calculate delta Ct values using GAPDH as housekeeping gene.
+
+    Formula:
+        dCt = Target Ct - GAPDH Ct
+
+    Parameters:
+        mean_ct_df (pandas.DataFrame):
+            DataFrame containing mean Ct values.
+
+    Returns:
+        pandas.DataFrame:
+            Pivoted DataFrame with delta Ct values.
+    """
+
     pivot_df = mean_ct_df.pivot(
         index=["Sample", "Group"],
         columns="Target",
@@ -34,8 +50,26 @@ def calculate_delta_ct(mean_ct_df):
 
     return pivot_df
 
+
 def calculate_delta_delta_ct(delta_ct_df):
-    control_df = delta_ct_df[delta_ct_df["Group"] == "Control"]
+    """
+    Calculate delta-delta Ct values using Control group as calibrator.
+
+    Formula:
+        ddCt = Sample dCt - Mean Control dCt
+
+    Parameters:
+        delta_ct_df (pandas.DataFrame):
+            DataFrame containing delta Ct values.
+
+    Returns:
+        pandas.DataFrame:
+            DataFrame containing delta-delta Ct values.
+    """
+
+    control_df = delta_ct_df[
+        delta_ct_df["Group"] == "Control"
+    ]
 
     control_means = {
         "IFNG": control_df["dCt_IFNG"].mean(),
