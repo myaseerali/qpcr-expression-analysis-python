@@ -1,47 +1,3 @@
-# from data_loader import load_qpcr_data
-
-
-# def main():
-#     file_path = "data/raw/tb_qpcr_export.csv"
-
-#     df = load_qpcr_data(file_path)
-
-#     print("Data loaded successfully")
-#     print()
-#     print("Shape:", df.shape)
-#     print()
-#     print(df.head())
-
-
-# if __name__ == "__main__":
-#     main()
-
-
-
-# from data_loader import load_qpcr_data
-# from qc import check_replicate_quality
-
-
-# def main():
-#     file_path = "data/raw/tb_qpcr_export.csv"
-
-#     df = load_qpcr_data(file_path)
-    
-#     bad_groups = check_replicate_quality(df, threshold=1.0)
-    
-#     print("QC RESULTS")
-#     print()
-
-#     if len(bad_groups) == 0:
-#         print("All technical replicates passed QC")
-#     else:
-#         print("Failed replicates:")
-#         for group in bad_groups:
-#             print(group)
-
-
-# if __name__ == "__main__":
-#     main()
 from plot_results import plot_fold_change
 from heatmap import plot_heatmap
 from fold_change import calculate_fold_change
@@ -116,20 +72,17 @@ def main():
     print()
     print("FOLD CHANGE VALUES")
     print()
-    
-    print()
-    print("FOLD CHANGE DATAFRAME")
-    print()
 
-    print(fold_change_df.head())
-    
     print(
         fold_change_df[
             ["Sample", "Group", "FC_IFNG", "FC_IL2RA", "FC_TNFA"]
         ].head()
     )
+
+    # Plot fold change
     plot_fold_change(fold_change_df)
-    
+
+    # Group summary
     summary_df = summarize_fold_change(fold_change_df)
 
     print()
@@ -137,8 +90,11 @@ def main():
     print()
 
     print(summary_df)
+
+    # Heatmap
     plot_heatmap(summary_df)
 
+    # Statistical testing
     p_values_df = perform_t_test(fold_change_df)
 
     print()
@@ -146,6 +102,8 @@ def main():
     print()
 
     print(p_values_df)
+
+    # Final report
     report_df = create_report(summary_df, p_values_df)
 
     print()
@@ -153,13 +111,19 @@ def main():
     print()
 
     print(report_df)
+
+    # Export results
     export_results(
-    fold_change_df,
-    summary_df,
-    p_values_df,
-    report_df
-)
+        fold_change_df,
+        summary_df,
+        p_values_df,
+        report_df
+    )
+
+    print()
+    print("Analysis completed successfully!")
+    print("Results saved in results folder.")
+
 
 if __name__ == "__main__":
     main()
-    
