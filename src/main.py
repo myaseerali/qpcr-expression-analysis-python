@@ -43,6 +43,7 @@
 # if __name__ == "__main__":
 #     main()
 from plot_results import plot_fold_change
+from heatmap import plot_heatmap
 from fold_change import calculate_fold_change
 from statistics import summarize_fold_change, perform_t_test
 from report import create_report
@@ -136,6 +137,7 @@ def main():
     print()
 
     print(summary_df)
+    plot_heatmap(summary_df)
 
     p_values_df = perform_t_test(fold_change_df)
 
