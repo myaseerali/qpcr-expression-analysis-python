@@ -44,6 +44,7 @@
 #     main()
 from plot_results import plot_fold_change
 from fold_change import calculate_fold_change
+from statistics import summarize_fold_change, perform_t_test
 from data_loader import load_qpcr_data
 from qc import check_replicate_quality
 from delta_ct import (
@@ -112,13 +113,36 @@ def main():
     print()
     print("FOLD CHANGE VALUES")
     print()
+    
+    print()
+    print("FOLD CHANGE DATAFRAME")
+    print()
 
+    print(fold_change_df.head())
+    
     print(
         fold_change_df[
             ["Sample", "Group", "FC_IFNG", "FC_IL2RA", "FC_TNFA"]
         ].head()
     )
     plot_fold_change(fold_change_df)
+    
+    summary_df = summarize_fold_change(fold_change_df)
+
+    print()
+    print("GROUP SUMMARY")
+    print()
+
+    print(summary_df)
+
+    p_values_df = perform_t_test(fold_change_df)
+
+    print()
+    print("STATISTICAL TEST RESULTS")
+    print()
+
+    print(p_values_df)
 
 if __name__ == "__main__":
     main()
+    
