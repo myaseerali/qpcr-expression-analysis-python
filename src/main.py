@@ -45,6 +45,8 @@
 from plot_results import plot_fold_change
 from fold_change import calculate_fold_change
 from statistics import summarize_fold_change, perform_t_test
+from report import create_report
+from export_results import export_results
 from data_loader import load_qpcr_data
 from qc import check_replicate_quality
 from delta_ct import (
@@ -142,6 +144,19 @@ def main():
     print()
 
     print(p_values_df)
+    report_df = create_report(summary_df, p_values_df)
+
+    print()
+    print("FINAL REPORT")
+    print()
+
+    print(report_df)
+    export_results(
+    fold_change_df,
+    summary_df,
+    p_values_df,
+    report_df
+)
 
 if __name__ == "__main__":
     main()
